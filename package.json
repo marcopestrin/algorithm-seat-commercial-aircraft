@@ -1,0 +1,15 @@
+{
+  "name": "algorithm-seat-commercial-aircraft",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "debug": "node --inspect index.js --noTimeout --corsDisallowCredentials false --noStart"
+  },
+  "author": "Marco Pestrin",
+  "license": "ISC",
+  "dependencies": {
+  }
+}
