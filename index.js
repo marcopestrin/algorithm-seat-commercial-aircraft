@@ -1,34 +1,36 @@
 const narrowBody = [
-  //[a,b,c,  d,e,f]
+  //[A,B,C,  D,E,F]
+    [0,0,0,  0,0,0],
+    [0,0,0,  0,0,0],
+    [0,0,0,  0,0,0], // 2 (limit business class)
+    // business class
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
-    // fine business class
-    [0,0,0,  0,0,0],
-    [0,0,0,  0,0,0], // 4
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
-    [0,0,0,  0,0,0],
-    [0,0,0,  0,0,0],
+    [0,0,0,  0,0,0], // 8 (middle)
     // emergency exit
     [0,0,0,  0,0,0],
-    [0,0,0,  0,0,0], // 10
+    [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0], // 15
-    // inizio parte inferiore
+    // starting bottom side
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
     [0,0,0,  0,0,0],
-    [0,0,0,  0,0,0], // 19
-  //[a,b,c,  d,e,f]
+    [0,0,0,  0,0,0], // 19 (bottom)
+  //[A,B,C,  D,E,F]
   ];
   
-  let total = 0;
-  let right = 0;
-  let left = 0;
+  let totalCounter = 0;
+  let rightCounter = 0;
+  let leftCounter = 0;
+  const LIMIT_ROW_BUSINESS_CLASS = 2;
+  const ROW_MIDDLE = 8;
   const totalRow = narrowBody.length - 1;
   
   const getLetterSeat = (seat) => {
@@ -55,22 +57,22 @@ const narrowBody = [
     if (side === 'right') _startPosition = 3;
     const _endPosition = _startPosition + nSeat;
     for (let i = _startPosition; i < _endPosition; i++) {
-      // if (narrowBody[row][i] !== 0) throw 'Seat already occuped';
+      if (narrowBody[row][i] !== 0) throw 'Seat already occuped';
       narrowBody[row][i] = `${row}${getLetterSeat(i)}`;
     }
-    if (side === 'left') left = left + nSeat;
-    if (side === 'right') right = right + nSeat;
+    if (side === 'left') leftCounter = leftCounter + nSeat;
+    if (side === 'right') rightCounter = rightCounter + nSeat;
     if (side === 'both') {
-      right = right + nSeat;
-      left = left + nSeat;
+      rightCounter = rightCounter + nSeat;
+      leftCounter = leftCounter + nSeat;
     }
-    total = total + nSeat;
+    totalCounter = totalCounter + nSeat;
   }
   
-  const reserve3Passengers = () => {
-    for (let row = totalRow; row > 2; row--) {
+  const reserve3Passengers = ({ startRow }) => {
+    for (let row = startRow; row > LIMIT_ROW_BUSINESS_CLASS; row--) {
       // fila 0, 1, 2 sono business class
-      if (left < right) {
+      if (leftCounter < rightCounter) {
         // controllo se ci sono posti liberi
         if (narrowBody[row][0] === 0 && narrowBody[row][1] === 0 && narrowBody[row][2] === 0) {
           getSeat({ row, nSeat: 3, side: "left" });
@@ -84,19 +86,17 @@ const narrowBody = [
       }
     }
     // TODO: le persone devono separarsi
-  
   }
   
-  const reserve1Passengers = () => {
-    for (let row = totalRow; row > 2; row--) {
-      // fila 0, 1, 2 sono business class
+  const reserve1Passengers = ({ startRow }) => {
+    for (let row = startRow; row > LIMIT_ROW_BUSINESS_CLASS; row--) {
       // controllo se ci sono posti liberi
       for (let column = 0; column < 6; column++) {
         if (narrowBody[row][column] === 0) {
           narrowBody[row][column] = `${row}${getLetterSeat(column)}`;
-          if ([0,1,2].includes(column)) left++
-          if ([3,4,5].includes(column)) right++
-          total++
+          if ([0,1,2].includes(column)) leftCounter++
+          if ([3,4,5].includes(column)) rightCounter++
+          totalCounter++
           return;
         }
       }
@@ -105,9 +105,8 @@ const narrowBody = [
   
   }
   
-  const reserve2Passengers = () => {
-    for (let row = totalRow; row > 2; row--) {
-      // fila 0, 1, 2 sono business class
+  const reserve2Passengers = ({ startRow }) => {
+    for (let row = startRow; row > LIMIT_ROW_BUSINESS_CLASS; row--) {
       // controllo se ci sono posti liberi
       if (narrowBody[row][0] === 0 && narrowBody[row][1] === 0) {
         getSeat({ row, nSeat: 2, side: "left" });
@@ -128,15 +127,13 @@ const narrowBody = [
   
   function reserveSeat(nSeat) {
     try {
-      if (total > 120) {
-        return 'aircraft full'
-      }
-      if (total < 24) {
-        // i primi 24 a prenotare devono occupare parte posteriore del velivolo
-        if (nSeat === 3) reserve3Passengers();
-        if (nSeat === 2) reserve2Passengers();
-        if (nSeat === 1) reserve1Passengers();
-      }
+      if (totalCounter > 120) return 'aircraft full'
+      const startRow = totalCounter < 24 ? totalRow : ROW_MIDDLE;
+      // i primi 24 a prenotare devono occupare parte posteriore del velivolo
+      // dopo si parte a popolare da metà in su
+      if (nSeat === 3) reserve3Passengers({ startRow });
+      if (nSeat === 2) reserve2Passengers({ startRow });
+      if (nSeat === 1) reserve1Passengers({ startRow });
       // dall'11esimo in poi a prenotare
     } catch (error) {
       console.log({ error });
@@ -148,15 +145,18 @@ const narrowBody = [
   reserveSeat(2) // si inizia a popolare da sinistra
   reserveSeat(2)
   reserveSeat(3)
-  reserveSeat(1)
   reserveSeat(2)
   reserveSeat(3)
+  reserveSeat(3)
+  reserveSeat(3)
+  reserveSeat(3)
   reserveSeat(1)
-  reserveSeat(1)
+  reserveSeat(3)
+  reserveSeat(2)
   console.log({
-    right,
-    left,
-    total
+    rightCounter,
+    leftCounter,
+    totalCounter
   })
   console.log(narrowBody)
   
