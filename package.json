@@ -11,5 +11,6 @@
   "author": "Marco Pestrin",
   "license": "ISC",
   "dependencies": {
+    "sass": "^1.49.9"
   }
 }

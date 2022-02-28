@@ -1,0 +1,31 @@
+.aircraft {
+  margin:30px;
+  display: inline-block;
+  padding: 15px 0px 15px 15px;
+  border: 1px solid #000;
+  .seat {
+    display: inline;
+    width: 10px;
+    height: 10px;
+    margin: 5px;
+    padding: 5px;
+    min-width: 5px;
+    &.free {
+      background-color: green;
+    }
+    &.occuped {
+      background-color: red;
+    }
+    &.aisle {
+      margin-right: 25px;
+    }
+  }
+  .end-row {
+    margin-bottom: 20px;
+    content: '';
+  }
+  .emergency-row, .end-business-class {
+    margin-top: 40px;
+  }
+  
+}

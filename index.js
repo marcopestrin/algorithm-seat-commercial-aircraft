@@ -85,11 +85,13 @@ const narrowBody = [
         break;     
       }
     }
-    // TODO: le persone devono separarsi
-  }
+    // i passeggeri vengono separati
+    // da testare!
+    reserveSeat(2);
+    reserveSeat(1);    }
   
   const reserve1Passengers = ({ startRow }) => {
-    for (let row = startRow; row > LIMIT_ROW_BUSINESS_CLASS; row--) {
+    for (let row = startRow; row > 0; row--) {
       // controllo se ci sono posti liberi
       for (let column = 0; column < 6; column++) {
         if (narrowBody[row][column] === 0) {
@@ -100,9 +102,7 @@ const narrowBody = [
           return;
         }
       }
-    }
-    // TODO: le persone devono separarsi
-  
+    }  
   }
   
   const reserve2Passengers = ({ startRow }) => {
@@ -121,8 +121,10 @@ const narrowBody = [
         break;
       }
     }
-    // TODO: le persone devono separarsi
-  
+    // i passeggeri vengono separati
+    // da testare!
+    reserveSeat(1);
+    reserveSeat(1);  
   };
   
   function reserveSeat(nSeat) {
