@@ -1,11 +1,13 @@
-import logo from './logo.svg';
-import './App.css';
 import Aircraft from './components/aircraft';
+import Commands from './components/commands';
+
+import narrowBody from './matrix';
 
 function App() {
   return (
     <div className="App">
-      <Aircraft />
+      <Aircraft narrowBody={narrowBody} />
+      <Commands />
     </div>
   );
 }
