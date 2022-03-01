@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { RESERVE_ONE, RESERVE_TWO, RESERVE_THREE } from "../../redux/actions";
+import { RESERVE_SEAT } from "../../redux/actions";
 import "./styles.scss";
 
 const Commands = () => {
@@ -8,18 +8,24 @@ const Commands = () => {
   const dispatch = useDispatch();
 
   const addOne = () => dispatch({
-    type: RESERVE_ONE,
-    payload: {}
+    type: RESERVE_SEAT,
+    payload: {
+      passengers: 1
+    }
   })
 
   const addTwo = () => dispatch({
-    type: RESERVE_TWO,
-    payload: {}
+    type: RESERVE_SEAT,
+    payload: {
+      passengers: 2
+    }
   })
 
   const addThree = () => dispatch({
-    type: RESERVE_THREE,
-    payload: {}
+    type: RESERVE_SEAT,
+    payload: {
+      passengers: 3
+    }
   })
 
   return (
