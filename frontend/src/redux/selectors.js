@@ -1,1 +1,1 @@
-export const selectorNarrowbody = (state) => state.selectorNarrowbody;
+export const selectorNarrowbody = (state) => state.narrowbody;

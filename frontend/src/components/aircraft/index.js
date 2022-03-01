@@ -1,11 +1,20 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { selectorNarrowbody } from '../../redux/selectors';
 import "./styles.scss";
 
-const Aircraft = ({ narrowBody }) => {
+const Aircraft = () => {
+
+    const {
+      limitRowBusinessClass,
+      rowMiddle,
+      matrix
+    } = useSelector(selectorNarrowbody);
+    
     return (
       <div className="aircraft">
         {
-          narrowBody.map((row, indexRow) => {
+          matrix.map((row, indexRow) => {
             const seat = row.map((column, index) => {
               return (
                 <div
@@ -27,10 +36,9 @@ const Aircraft = ({ narrowBody }) => {
                   key={indexRow}
                   className={`
                     end-row
-                    ${indexRow === 9 ? ' emergency-row ' : ''}
-                    ${indexRow === 2 ? ' end-business-class ' : ''}
-                  `
-                  }
+                    ${indexRow === rowMiddle ? ' emergency-row ' : ''}
+                    ${indexRow === limitRowBusinessClass ? ' end-business-class ' : ''}
+                  `}
                 >
                 </div>
               </>

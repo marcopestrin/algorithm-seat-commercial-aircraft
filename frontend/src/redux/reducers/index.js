@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
-import narrowBody from "./narrowbody";
+import narrowbody from "./narrowbody";
 
 const reducers = combineReducers({
-    narrowBody
+    narrowbody
 });
 export default reducers;
