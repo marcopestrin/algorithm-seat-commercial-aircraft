@@ -36,6 +36,7 @@ const getSeat = ({ row, nSeat, side, matrix, rightCounter, leftCounter, totalCou
       leftCounter = leftCounter + nSeat;
     }
     totalCounter = totalCounter + nSeat;
+    return { totalCounter, rightCounter, leftCounter }
 }
 
 const reserve1Passengers = ({
@@ -53,7 +54,7 @@ const reserve1Passengers = ({
                 if ([0,1,2].includes(column)) leftCounter++
                 if ([3,4,5].includes(column)) rightCounter++
                 totalCounter++
-                return;
+                return { leftCounter, rightCounter, totalCounter }
             }
         }
     }
@@ -64,25 +65,19 @@ const reserve2Passengers = (input) => {
     for (let row = startRow; row > limitRowBusinessClass; row--) {
       // controllo se ci sono posti liberi
         if (matrix[row][0] === 0 && matrix[row][1] === 0) {
-            getSeat({ row, nSeat: 2, side: "left", ...input });
-            console.log("Left");
-            return;
+            return getSeat({ row, nSeat: 2, side: "left", ...input });
         }
         if (matrix[row][2] === 0 && matrix[row][3] === 0) {
-            getSeat({ row, nSeat: 2, side: "both", ...input });
-            console.log("Both");
-            return;
+            return getSeat({ row, nSeat: 2, side: "both", ...input });
         }
         if (matrix[row][4] === 0 && matrix[row][5] === 0) {
-            getSeat({ row, nSeat: 2, side: "right", ...input });
-            console.log("Right");
-            return;
+            return getSeat({ row, nSeat: 2, side: "right", ...input });
         }
     }
     // console.log("Split passengers");
     // i passeggeri vengono separati
     reserve1Passengers({ startRow, ...input });
-    reserve1Passengers({ startRow, ...input });  
+    return reserve1Passengers({ startRow, ...input });  
   };
 
 
@@ -93,22 +88,18 @@ const reserve3Passengers = (input) => {
         if (leftCounter < rightCounter) {
             // controllo se ci sono posti liberi
             if (matrix[row][0] === 0 && matrix[row][1] === 0 && matrix[row][2] === 0) {
-                getSeat({ row, nSeat: 3, side: "left", ...input });
-                console.log("Left");
-                return;
+                return getSeat({ row, nSeat: 3, side: "left", ...input });
             }
         }
       // controllo se ci sono posti liberi
         if (matrix[row][3] === 0 && matrix[row][4] === 0 && matrix[row][5] === 0) {
-            getSeat({ row, nSeat: 3, side: "right", ...input });
-            console.log("Right");
-            return;     
+            return getSeat({ row, nSeat: 3, side: "right", ...input });
         }
     }
     // i passeggeri vengono separati
     // da testare!
     reserve2Passengers({ startRow, ...input });
-    reserve1Passengers({ startRow, ...input });
+    return reserve1Passengers({ startRow, ...input });
 }
 
 export default function narrowbody(prevState = {}, action){
@@ -121,9 +112,20 @@ export default function narrowbody(prevState = {}, action){
             const { passengers } = payload
             const { totalCounter, totalRow, rowMiddle } = clonedState
             const startRow = totalCounter < 24 ? totalRow : rowMiddle;
-            if (passengers === 3) reserve3Passengers({ startRow, ...clonedState });
-            if (passengers === 2) reserve2Passengers({ startRow, ...clonedState});
-            if (passengers === 1) reserve1Passengers({ startRow, ...clonedState});
+            let result = {}
+            if (passengers === 3) {
+                result = reserve3Passengers({ startRow, ...clonedState })
+            };
+            if (passengers === 2) {
+                result = reserve2Passengers({ startRow, ...clonedState});
+            }
+            if (passengers === 1) {
+                result = reserve1Passengers({ startRow, ...clonedState});
+            }
+            clonedState = {
+                ...clonedState,
+                ...result
+            };
             break;
 
         default:
