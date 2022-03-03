@@ -36,9 +36,10 @@ const reserve1Passengers = ({
     totalCounter,
     rightCounter,
     leftCounter,
+    limitRowBusinessClass,
     matrix
 }) => {
-    for (let row = startRow; row > 0; row--) {
+    for (let row = startRow; row > limitRowBusinessClass; row--) {
         // controllo se ci sono posti liberi
         for (let column = 0; column < 6; column++) {
             if (matrix[row][column] === 0) {
@@ -73,8 +74,12 @@ const reserve2Passengers = (input) => {
         }
     }
     // i passeggeri vengono separati
-    reserve1Passengers({ startRow, ...input });
-    return reserve1Passengers({ startRow, ...input });  
+    const newInput = {
+        ...input,
+        startRow: input.totalRow
+    }
+    reserve1Passengers(newInput);
+    return reserve1Passengers(newInput);  
   };
 
 
@@ -94,9 +99,12 @@ const reserve3Passengers = (input) => {
         }
     }
     // i passeggeri vengono separati
-    // da testare!
-    reserve2Passengers({ startRow, ...input });
-    return reserve1Passengers({ startRow, ...input });
+    const newInput = {
+        ...input,
+        startRow: input.totalRow
+    }
+    reserve2Passengers(newInput);
+    return reserve1Passengers(newInput);
 }
 
 export default function narrowbody(prevState = {}, action){
