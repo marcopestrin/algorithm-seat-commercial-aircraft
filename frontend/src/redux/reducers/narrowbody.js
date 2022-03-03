@@ -20,21 +20,13 @@ const getLetterSeat = (seat) => {
 }
 
 
-const getSeat = ({ row, nSeat, side, matrix, rightCounter, leftCounter, totalCounter }) => {
-    let _startPosition = 2; // posto C
-    if (side === 'left') _startPosition = 0;
-    if (side === 'right') _startPosition = 3;
-    const _endPosition = _startPosition + nSeat;
-    for (let i = _startPosition; i < _endPosition; i++) {
-      // if (matrix[row][i] !== 0) throw 'Seat already occuped';
+const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter, totalCounter }) => {
+    const _endPosition = startPosition + nSeat;
+    for (let i = startPosition; i < _endPosition; i++) {
       matrix[row][i] = `${row}${getLetterSeat(i)}`;
     }
-    if (side === 'left') leftCounter = leftCounter + nSeat;
-    if (side === 'right') rightCounter = rightCounter + nSeat;
-    if (side === 'both') {
-      rightCounter = rightCounter + nSeat;
-      leftCounter = leftCounter + nSeat;
-    }
+    if ([0,1,2].includes(startPosition)) leftCounter = leftCounter + nSeat;
+    if ([3,4,5].includes(startPosition)) rightCounter = rightCounter + nSeat;
     totalCounter = totalCounter + nSeat;
     return { totalCounter, rightCounter, leftCounter }
 }
@@ -64,17 +56,22 @@ const reserve2Passengers = (input) => {
     const { startRow, limitRowBusinessClass, matrix } = input
     for (let row = startRow; row > limitRowBusinessClass; row--) {
       // controllo se ci sono posti liberi
-        if (matrix[row][0] === 0 && matrix[row][1] === 0) {
-            return getSeat({ row, nSeat: 2, side: "left", ...input });
+        if ((matrix[row][0] === 0 && matrix[row][1] === 0)) {
+            return getSeat({ row, nSeat: 2, startPosition: 0, ...input });
+        }
+        if ((matrix[row][1] === 0 && matrix[row][2] === 0)) {
+            return getSeat({ row, nSeat: 2, startPosition: 1, ...input });
         }
         if (matrix[row][2] === 0 && matrix[row][3] === 0) {
-            return getSeat({ row, nSeat: 2, side: "both", ...input });
+            return getSeat({ row, nSeat: 2, startPosition: 2, ...input });
+        }
+        if (matrix[row][3] === 0 && matrix[row][4] === 0) {
+            return getSeat({ row, nSeat: 2, startPosition: 3, ...input });
         }
         if (matrix[row][4] === 0 && matrix[row][5] === 0) {
-            return getSeat({ row, nSeat: 2, side: "right", ...input });
+            return getSeat({ row, nSeat: 2, startPosition: 4, ...input });
         }
     }
-    // console.log("Split passengers");
     // i passeggeri vengono separati
     reserve1Passengers({ startRow, ...input });
     return reserve1Passengers({ startRow, ...input });  
@@ -88,12 +85,12 @@ const reserve3Passengers = (input) => {
         if (leftCounter < rightCounter) {
             // controllo se ci sono posti liberi
             if (matrix[row][0] === 0 && matrix[row][1] === 0 && matrix[row][2] === 0) {
-                return getSeat({ row, nSeat: 3, side: "left", ...input });
+                return getSeat({ row, nSeat: 3, startPosition: 0, ...input });
             }
         }
       // controllo se ci sono posti liberi
         if (matrix[row][3] === 0 && matrix[row][4] === 0 && matrix[row][5] === 0) {
-            return getSeat({ row, nSeat: 3, side: "right", ...input });
+            return getSeat({ row, nSeat: 3, startPosition: 3, ...input });
         }
     }
     // i passeggeri vengono separati
@@ -107,7 +104,6 @@ export default function narrowbody(prevState = {}, action){
   const { type, payload } = action;
 
     switch (type) {
-
         case actions.RESERVE_SEAT:
             const { passengers } = payload
             const { totalCounter, totalRow, rowMiddle } = clonedState
@@ -127,7 +123,6 @@ export default function narrowbody(prevState = {}, action){
                 ...result
             };
             break;
-
         default:
             break;
     }
