@@ -1,12 +1,17 @@
 import Aircraft from './components/aircraft';
 import Commands from './components/commands';
+import Template from './components/template';
 
 function App() {
   return (
-    <div className="App">
-      <Aircraft />
-      <Commands />
-    </div>
+    <Template>
+      <div className='side'>
+        <Aircraft />
+      </div>
+      <div className='side'>
+        <Commands />
+      </div>
+    </Template>
   );
 }
 

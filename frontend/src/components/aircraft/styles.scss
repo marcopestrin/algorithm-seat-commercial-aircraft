@@ -1,15 +1,18 @@
 .aircraft {
-  margin:30px;
+  margin:10px;
   display: inline-block;
   padding: 15px 0px 15px 15px;
   border: 1px solid #000;
   .seat {
-    display: inline;
+    display: inline-block;
     width: 10px;
     height: 10px;
-    margin: 5px;
+    margin: 1px 3px;
     padding: 5px;
-    min-width: 5px;
+    min-width: 25px;
+    min-height: 25px;
+    text-align: center;
+    font-size: 14px;
     &.free {
       background-color: green;
     }

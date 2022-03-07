@@ -29,11 +29,11 @@ const Commands = () => {
   })
 
   return (
-      <>
-        <button onClick={addOne} >add 1</button>
-        <button onClick={addTwo}>add 2</button>
-        <button onClick={addThree}>add 3</button>
-      </>
+      <div className="control">
+        <button onClick={addOne} >Add 1 passenger</button>
+        <button onClick={addTwo}>Add 2 passengers</button>
+        <button onClick={addThree}>Add 3 passengers</button>
+      </div>
     )
 }
 
