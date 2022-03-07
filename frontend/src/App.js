@@ -5,12 +5,8 @@ import Template from './components/template';
 function App() {
   return (
     <Template>
-      <div className='side'>
-        <Aircraft />
-      </div>
-      <div className='side'>
-        <Commands />
-      </div>
+      <Aircraft />
+      <Commands />
     </Template>
   );
 }

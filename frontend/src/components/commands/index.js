@@ -1,38 +1,30 @@
 import React from "react";
 import { useDispatch } from "react-redux";
 import { RESERVE_SEAT } from "../../redux/actions";
+import Counter from '../counter';
 import "./styles.scss";
 
 const Commands = () => {
 
   const dispatch = useDispatch();
 
-  const addOne = () => dispatch({
+  const add = (rate, passengers) => dispatch({
     type: RESERVE_SEAT,
-    payload: {
-      passengers: 1
-    }
-  })
-
-  const addTwo = () => dispatch({
-    type: RESERVE_SEAT,
-    payload: {
-      passengers: 2
-    }
-  })
-
-  const addThree = () => dispatch({
-    type: RESERVE_SEAT,
-    payload: {
-      passengers: 3
-    }
+    payload: { rate, passengers }
   })
 
   return (
       <div className="control">
-        <button onClick={addOne} >Add 1 passenger</button>
-        <button onClick={addTwo}>Add 2 passengers</button>
-        <button onClick={addThree}>Add 3 passengers</button>
+        <Counter />
+        <p>Business Class:</p>
+        <button className="business" onClick={() => add('business', 1)} >Add <strong>1</strong> passenger</button>
+        <button className="business" onClick={() => add('business', 2)}>Add <strong>2</strong> passengers</button>
+        <button className="business" onClick={() => add('business', 3)}>Add <strong>3</strong> passengers</button>
+        <br />
+        <p>Economy Class:</p>
+        <button className="economy" onClick={() => add('economy', 1)} >Add <strong>1</strong> passenger</button>
+        <button className="economy" onClick={() => add('economy', 2)}>Add <strong>2</strong> passengers</button>
+        <button className="economy" onClick={() => add('economy', 3)}>Add <strong>3</strong> passengers</button>
       </div>
     )
 }

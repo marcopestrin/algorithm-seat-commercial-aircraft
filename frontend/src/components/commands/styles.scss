@@ -1,4 +1,5 @@
 .control {
+  display: inline-block;
   button {
     display: block;
     margin: 20px;
@@ -6,6 +7,16 @@
     min-width: 200px;
     background-color: #fff;
     box-shadow: none;
-    border: 3px solid #000
+    border: 3px solid #000;
+    cursor: pointer;
+    &.business {
+      background-color: yellow
+    }
+    &.economy {
+      background-color: grey
+    }
+    strong {
+      font-size: 22px;
+    }
   }
 }
