@@ -12,6 +12,10 @@
     &.business {
       background-color: yellow
     }
+    &.fullBusinessClass {
+      opacity: 0.5;
+      cursor: auto;
+    }
     &.economy {
       background-color: grey
     }

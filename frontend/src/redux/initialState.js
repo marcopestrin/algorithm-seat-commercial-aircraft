@@ -8,7 +8,9 @@ const initialState = {
     leftCounter: 0,
     limitRowBusinessClass: 2,
     rowMiddle: 8,
-    totalRow: narrowbody.length - 1
+    totalRow: narrowbody.length - 1,
+    fullBusinessClass: false,
+    fullAircraft: false
   }
 };
 

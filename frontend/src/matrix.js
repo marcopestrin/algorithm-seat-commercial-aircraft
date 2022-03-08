@@ -1,7 +1,7 @@
 const narrowBody = [
   //[A,B,C,  D,E,F]
     [0,0,0,  0,0,0],
-    [1,0,0,  1,0,0],
+    [0,0,0,  0,0,0],
     [0,0,0,  0,0,0], // 2 (limit business class)
     // business class
     [0,0,0,  0,0,0],

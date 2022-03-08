@@ -19,16 +19,25 @@ const getLetterSeat = (seat) => {
     }
 }
 
-
 const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter, totalCounter }) => {
     const _endPosition = startPosition + nSeat;
     for (let i = startPosition; i < _endPosition; i++) {
       matrix[row][i] = `${row}${getLetterSeat(i)}`;
     }
-    if ([0,1,2].includes(startPosition)) leftCounter = leftCounter + nSeat;
-    if ([3,4,5].includes(startPosition)) rightCounter = rightCounter + nSeat;
+    if (startPosition === 2 && nSeat === 2) {
+        leftCounter++;
+        rightCounter++;
+        totalCounter =+ 2 ;
+        return { totalCounter, rightCounter, leftCounter };
+    }
+    if ([0,1,2].includes(startPosition)) {
+        leftCounter = leftCounter + nSeat;
+    }
+    if ([3,4,5].includes(startPosition)) {
+        rightCounter = rightCounter + nSeat;
+    }
     totalCounter = totalCounter + nSeat;
-    return { totalCounter, rightCounter, leftCounter }
+    return { totalCounter, rightCounter, leftCounter };
 }
 
 const reserve1Passengers = ({
@@ -44,8 +53,8 @@ const reserve1Passengers = ({
         for (let column = 0; column < 6; column++) {
             if (matrix[row][column] === 0) {
                 matrix[row][column] = `${row}${getLetterSeat(column)}`;
-                if ([0,1,2].includes(column)) leftCounter++
-                if ([3,4,5].includes(column)) rightCounter++
+                if ([0,1,2].includes(column)) leftCounter++;
+                if ([3,4,5].includes(column)) rightCounter++;
                 totalCounter++
                 return { leftCounter, rightCounter, totalCounter }
             }
@@ -56,7 +65,7 @@ const reserve1Passengers = ({
 const reserve2Passengers = (input) => {
     const { startRow, limitRowBusinessClass, matrix } = input
     for (let row = startRow; row > limitRowBusinessClass; row--) {
-      // controllo se ci sono posti liberi
+        // controllo se ci sono posti liberi
         if ((matrix[row][0] === 0 && matrix[row][1] === 0)) {
             return getSeat({ row, nSeat: 2, startPosition: 0, ...input });
         }
@@ -107,24 +116,48 @@ const reserve3Passengers = (input) => {
     return reserve1Passengers(newInput);
 }
 
+const reserverBusinessClass = ({ limitRowBusinessClass, rightCounter, leftCounter, matrix, totalCounter }) => {
+    for (let row = 0; row < limitRowBusinessClass +1; row++) {
+        const start = leftCounter > rightCounter ? 3 : 0;
+        const limit = leftCounter > rightCounter ? 6 : 3;
+        for (let column = start; column < limit ; column++) {
+            if (matrix[row][column] === 0) {
+                matrix[row][column] = `${row}${getLetterSeat(column)}`;
+                if ([0,1,2].includes(column)) leftCounter++;
+                if ([3,4,5].includes(column)) rightCounter++;
+                totalCounter++;
+                return { leftCounter, rightCounter, totalCounter };
+            }
+        }
+        if (row === limitRowBusinessClass) {
+            return { fullBusinessClass: true };
+        }
+    }
+};
+
 export default function narrowbody(prevState = {}, action){
   let clonedState = JSON.parse(JSON.stringify(prevState));
   const { type, payload } = action;
 
     switch (type) {
         case actions.RESERVE_SEAT:
-            const { passengers } = payload
-            const { totalCounter, totalRow, rowMiddle } = clonedState
-            const startRow = totalCounter < 24 ? totalRow : rowMiddle;
+            const { passengers, rate } = payload;
+            const { totalCounter, totalRow, rowMiddle } = clonedState;
             let result = {}
-            if (passengers === 3) {
-                result = reserve3Passengers({ startRow, ...clonedState })
-            };
-            if (passengers === 2) {
-                result = reserve2Passengers({ startRow, ...clonedState});
+            if (rate === "economy") {
+                const startRow = totalCounter < 24 ? totalRow : rowMiddle;
+                if (passengers === 3) {
+                    result = reserve3Passengers({ startRow, ...clonedState });
+                };
+                if (passengers === 2) {
+                    result = reserve2Passengers({ startRow, ...clonedState});
+                }
+                if (passengers === 1) {
+                    result = reserve1Passengers({ startRow, ...clonedState});
+                }
             }
-            if (passengers === 1) {
-                result = reserve1Passengers({ startRow, ...clonedState});
+            if (rate === "business") {
+                result = reserverBusinessClass({ ...clonedState, });
             }
             clonedState = {
                 ...clonedState,

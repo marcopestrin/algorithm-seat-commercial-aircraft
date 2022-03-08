@@ -30,7 +30,7 @@ const Aircraft = () => {
               )
             });
             return (
-              <>
+              <div key={indexRow}>
                 { seat }
                 <div
                   key={indexRow}
@@ -41,7 +41,7 @@ const Aircraft = () => {
                   `}
                 >
                 </div>
-              </>
+              </div>
             )
           })
         }
