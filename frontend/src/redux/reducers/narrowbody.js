@@ -27,7 +27,7 @@ const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter,
     if (startPosition === 2 && nSeat === 2) {
         leftCounter++;
         rightCounter++;
-        totalCounter =+ 2 ;
+        totalCounter += 2 ;
         return { totalCounter, rightCounter, leftCounter };
     }
     if ([0,1,2].includes(startPosition)) {
@@ -40,30 +40,24 @@ const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter,
     return { totalCounter, rightCounter, leftCounter };
 }
 
-const reserve1Passengers = ({
-    startRow,
-    totalCounter,
-    rightCounter,
-    leftCounter,
-    limitRowBusinessClass,
-    matrix
-}) => {
+const reserve1Passengers = (input) => {
+    const { startRow, limitRowBusinessClass, matrix } = input;
     for (let row = startRow; row > limitRowBusinessClass; row--) {
         // controllo se ci sono posti liberi
         for (let column = 0; column < 6; column++) {
             if (matrix[row][column] === 0) {
-                matrix[row][column] = `${row}${getLetterSeat(column)}`;
-                if ([0,1,2].includes(column)) leftCounter++;
-                if ([3,4,5].includes(column)) rightCounter++;
-                totalCounter++
-                return { leftCounter, rightCounter, totalCounter }
+                return getSeat({ row, nSeat: 1, startPosition: column, ...input });
             }
         }
     }
+    return reserve1Passengers({
+        ...input,
+        startRow: input.totalRow
+    });
 }
 
 const reserve2Passengers = (input) => {
-    const { startRow, limitRowBusinessClass, matrix } = input
+    const { startRow, limitRowBusinessClass, matrix } = input;
     for (let row = startRow; row > limitRowBusinessClass; row--) {
         // controllo se ci sono posti liberi
         if ((matrix[row][0] === 0 && matrix[row][1] === 0)) {
