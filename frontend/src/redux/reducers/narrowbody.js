@@ -19,7 +19,7 @@ const getLetterSeat = (seat) => {
     }
 }
 
-const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter, totalCounter }) => {
+const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter, totalCounter, economyCounter }) => {
     const _endPosition = startPosition + nSeat;
     for (let i = startPosition; i < _endPosition; i++) {
       matrix[row][i] = `${row}${getLetterSeat(i)}`;
@@ -27,8 +27,8 @@ const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter,
     if (startPosition === 2 && nSeat === 2) {
         leftCounter++;
         rightCounter++;
-        totalCounter += 2 ;
-        return { totalCounter, rightCounter, leftCounter };
+        economyCounter += 2;
+        return { rightCounter, leftCounter };
     }
     if ([0,1,2].includes(startPosition)) {
         leftCounter = leftCounter + nSeat;
@@ -37,7 +37,8 @@ const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter,
         rightCounter = rightCounter + nSeat;
     }
     totalCounter = totalCounter + nSeat;
-    return { totalCounter, rightCounter, leftCounter };
+    economyCounter = economyCounter + nSeat;
+    return { totalCounter, rightCounter, leftCounter, economyCounter };
 }
 
 const reserve1Passengers = (input) => {
@@ -110,7 +111,7 @@ const reserve3Passengers = (input) => {
     return reserve1Passengers(newInput);
 }
 
-const reserverBusinessClass = ({ limitRowBusinessClass, rightCounter, leftCounter, matrix, totalCounter }) => {
+const reserverBusinessClass = ({ limitRowBusinessClass, rightCounter, leftCounter, matrix, businessCounter }) => {
     for (let row = 0; row < limitRowBusinessClass +1; row++) {
         const start = leftCounter > rightCounter ? 3 : 0;
         const limit = leftCounter > rightCounter ? 6 : 3;
@@ -119,8 +120,8 @@ const reserverBusinessClass = ({ limitRowBusinessClass, rightCounter, leftCounte
                 matrix[row][column] = `${row}${getLetterSeat(column)}`;
                 if ([0,1,2].includes(column)) leftCounter++;
                 if ([3,4,5].includes(column)) rightCounter++;
-                totalCounter++;
-                return { leftCounter, rightCounter, totalCounter };
+                businessCounter++;
+                return { leftCounter, rightCounter, businessCounter };
             }
         }
         if (row === limitRowBusinessClass) {
@@ -136,10 +137,10 @@ export default function narrowbody(prevState = {}, action){
     switch (type) {
         case actions.RESERVE_SEAT:
             const { passengers, rate } = payload;
-            const { totalCounter, totalRow, rowMiddle } = clonedState;
-            let result = {}
+            const { totalRow, rowMiddle, economyCounter } = clonedState;
+            let result = {};
             if (rate === "economy") {
-                const startRow = totalCounter < 24 ? totalRow : rowMiddle;
+                const startRow = economyCounter < 24 ? totalRow : rowMiddle;
                 if (passengers === 3) {
                     result = reserve3Passengers({ startRow, ...clonedState });
                 };
@@ -151,11 +152,13 @@ export default function narrowbody(prevState = {}, action){
                 }
             }
             if (rate === "business") {
-                result = reserverBusinessClass({ ...clonedState, });
+                result = reserverBusinessClass({ ...clonedState });
             }
+            const { leftCounter, rightCounter } = result
             clonedState = {
                 ...clonedState,
-                ...result
+                ...result,
+                totalCounter: leftCounter + rightCounter
             };
             break;
         default:

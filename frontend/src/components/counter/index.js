@@ -7,13 +7,17 @@ const Counter =() => {
     totalCounter,
     rightCounter,
     leftCounter,
-    totalRow
+    totalRow,
+    economyCounter,
+    businessCounter
   } = useSelector(selectorNarrowbody);
   return (
     <div className="counter">
       <p>Total passenger: <strong>{totalCounter}</strong> ({(Math.floor(totalCounter/(totalRow*6)*100))}%)</p>
-      <p>Left side: <strong>{leftCounter}</strong> ({(rightCounter || leftCounter) && (Math.floor(leftCounter/totalCounter*100))}%)</p>
-      <p>Right side: <strong>{rightCounter}</strong> ({(rightCounter || leftCounter) && (Math.floor(rightCounter/totalCounter*100))}%)</p>
+      <p>Left side: <strong>{leftCounter}</strong> ({leftCounter && (Math.floor(leftCounter/totalCounter*100))}%)</p>
+      <p>Right side: <strong>{rightCounter}</strong> ({rightCounter && (Math.floor(rightCounter/totalCounter*100))}%)</p>
+      <p>Business class: <strong>{businessCounter}</strong> ({businessCounter && (Math.floor(businessCounter/totalCounter*100))}%)</p>
+      <p>Economy class: <strong>{economyCounter}</strong> ({economyCounter && (Math.floor(economyCounter/totalCounter*100))}%)</p>
     </div>
   )
 }
