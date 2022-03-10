@@ -3,19 +3,19 @@ import * as actions from "../actions";
 const getLetterSeat = (seat) => {
     switch (seat) {
         case 0:
-            return 'a'
+            return 'a';
         case 1:
-            return 'b'
+            return 'b';
         case 2:
-            return 'c'
+            return 'c';
         case 3:
-            return 'd'
+            return 'd';
         case 4:
-            return 'e'
+            return 'e';
         case 5:
-            return 'f'
+            return 'f';
         default:
-            return 'x'                             
+            return 'x';                            
     }
 }
 
@@ -84,7 +84,7 @@ const reserve2Passengers = (input) => {
     }
     reserve1Passengers(newInput);
     return reserve1Passengers(newInput);  
-  };
+};
 
 
 const reserve3Passengers = (input) => {
@@ -133,36 +133,43 @@ const reserverBusinessClass = ({ limitRowBusinessClass, rightCounter, leftCounte
 export default function narrowbody(prevState = {}, action){
   let clonedState = JSON.parse(JSON.stringify(prevState));
   const { type, payload } = action;
+  const { totalRow, rowMiddle, economyCounter } = clonedState;
+  let result = {};
 
     switch (type) {
-        case actions.RESERVE_SEAT:
-            const { passengers, rate } = payload;
-            const { totalRow, rowMiddle, economyCounter } = clonedState;
-            let result = {};
-            if (rate === "economy") {
-                const startRow = economyCounter < 24 ? totalRow : rowMiddle;
-                if (passengers === 3) {
-                    result = reserve3Passengers({ startRow, ...clonedState });
-                };
-                if (passengers === 2) {
-                    result = reserve2Passengers({ startRow, ...clonedState});
-                }
-                if (passengers === 1) {
-                    result = reserve1Passengers({ startRow, ...clonedState});
-                }
-            }
-            if (rate === "business") {
-                result = reserverBusinessClass({ ...clonedState });
-            }
-            const { leftCounter, rightCounter } = result
+
+        case actions.RESERVE_SEAT_BUSINESS_CLASS:
+            result = reserverBusinessClass({ ...clonedState });
             clonedState = {
                 ...clonedState,
                 ...result,
-                totalCounter: leftCounter + rightCounter
+                totalCounter: result.leftCounter + result.rightCounter
             };
             break;
+
+        case actions.RESERVE_SEAT_ECONOMY_CLASS:
+            const { passengers } = payload;
+            const startRow = economyCounter < 24 ? totalRow : rowMiddle;
+            if (passengers === 3) {
+                result = reserve3Passengers({ startRow, ...clonedState });
+            };
+            if (passengers === 2) {
+                result = reserve2Passengers({ startRow, ...clonedState});
+            };
+            if (passengers === 1) {
+                result = reserve1Passengers({ startRow, ...clonedState});
+            };
+            clonedState = {
+                ...clonedState,
+                ...result,
+                totalCounter: result.leftCounter + result.rightCounter
+            };
+            break;
+
         default:
             break;
+
     }
+
     return clonedState;
 };
