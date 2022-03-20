@@ -1,17 +1,28 @@
 import narrowbody from "../matrix";
 
+const limitRowBusinessClass = 2;
+const totalRow = narrowbody.length - 1;
+const businessClassTotalSeat = (limitRowBusinessClass + 1) * 6;
+const economyClassTotalSeat = (totalRow - limitRowBusinessClass) * 6;
+
 const initialState = {
   narrowbody: {
-    matrix: narrowbody ,
+    matrix: narrowbody,
+
     totalCounter: 0,
     rightCounter: 0,
     leftCounter: 0,
     economyCounter: 0,
     businessCounter: 0,
-    limitRowBusinessClass: 2,
+
+    limitRowBusinessClass,
+    businessClassTotalSeat,
+    economyClassTotalSeat,
+    totalRow,
     rowMiddle: 8,
-    totalRow: narrowbody.length - 1,
+
     fullBusinessClass: false,
+    fullEconomyClass: false,
     fullAircraft: false
   }
 };

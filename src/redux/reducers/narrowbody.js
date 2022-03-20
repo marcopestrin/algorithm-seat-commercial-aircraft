@@ -122,16 +122,13 @@ const reserverBusinessClass = ({ limitRowBusinessClass, rightCounter, leftCounte
                 return { leftCounter, rightCounter, businessCounter };
             }
         }
-        if (row === limitRowBusinessClass) {
-            return { fullBusinessClass: true };
-        }
     }
 };
 
 export default function narrowbody(prevState = {}, action){
   let clonedState = JSON.parse(JSON.stringify(prevState));
   const { type, payload } = action;
-  const { totalRow, rowMiddle, economyCounter, totalCounter } = clonedState;
+  const { totalRow, rowMiddle, economyCounter, totalCounter, economyClassTotalSeat, businessClassTotalSeat } = clonedState;
   let result = {};
 
     switch (type) {
@@ -141,14 +138,14 @@ export default function narrowbody(prevState = {}, action){
             clonedState = {
                 ...clonedState,
                 ...result,
-                totalCounter: result.leftCounter + result.rightCounter
+                totalCounter: result.leftCounter + result.rightCounter,
+                fullBusinessClass: businessClassTotalSeat === result.businessCounter
             };
             break;
 
         case actions.RESERVE_SEAT_ECONOMY_CLASS:
             const { passengers } = payload;
             const startRow = economyCounter < 24 || totalCounter > 48 ? totalRow : rowMiddle;
-
             if (passengers === 3) {
                 result = reserve3Passengers({ startRow, ...clonedState });
             };
@@ -161,7 +158,8 @@ export default function narrowbody(prevState = {}, action){
             clonedState = {
                 ...clonedState,
                 ...result,
-                totalCounter: result.leftCounter + result.rightCounter
+                totalCounter: result.leftCounter + result.rightCounter,
+                fullEconomyClass: economyClassTotalSeat <= result.economyCounter
             };
             break;
 

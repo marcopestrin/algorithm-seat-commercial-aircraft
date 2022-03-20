@@ -11,13 +11,24 @@ const Counter =() => {
     economyCounter,
     businessCounter
   } = useSelector(selectorNarrowbody);
+
+  const getPercentageCapacity = () => {
+    const totalSeat = (totalRow +1) * 6;
+    return Math.floor(totalCounter/totalSeat * 100);
+  };
+
+  const getPercentageLeftSide = () => leftCounter && (Math.floor(leftCounter / totalCounter * 100));
+  const getPercentageRightSide = () => rightCounter && (Math.floor(rightCounter / totalCounter * 100));
+  const getPercentageBusinessClass = () => businessCounter && (Math.floor(businessCounter / totalCounter * 100));
+  const getPercentageEconomyClass = () => economyCounter && (Math.floor(economyCounter / totalCounter * 100));
+
   return (
     <div className="counter">
-      <p>Total passenger: <strong>{totalCounter}</strong> ({(Math.floor(totalCounter/(totalRow*6)*100))}%)</p>
-      <p>Left side: <strong>{leftCounter}</strong> ({leftCounter && (Math.floor(leftCounter/totalCounter*100))}%)</p>
-      <p>Right side: <strong>{rightCounter}</strong> ({rightCounter && (Math.floor(rightCounter/totalCounter*100))}%)</p>
-      <p>Business class: <strong>{businessCounter}</strong> ({businessCounter && (Math.floor(businessCounter/totalCounter*100))}%)</p>
-      <p>Economy class: <strong>{economyCounter}</strong> ({economyCounter && (Math.floor(economyCounter/totalCounter*100))}%)</p>
+      <p>Total passenger: <strong>{totalCounter}</strong> ({getPercentageCapacity()}%)</p>
+      <p>Left side: <strong>{leftCounter}</strong> ({getPercentageLeftSide()}%)</p>
+      <p>Right side: <strong>{rightCounter}</strong> ({getPercentageRightSide()}%)</p>
+      <p>Business class: <strong>{businessCounter}</strong> ({getPercentageBusinessClass()}%)</p>
+      <p>Economy class: <strong>{economyCounter}</strong> ({getPercentageEconomyClass()}%)</p>
     </div>
   )
 }
