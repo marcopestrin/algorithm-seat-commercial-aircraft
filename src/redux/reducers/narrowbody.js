@@ -159,7 +159,7 @@ export default function narrowbody(prevState = {}, action){
                 ...clonedState,
                 ...result,
                 totalCounter: result.leftCounter + result.rightCounter,
-                fullEconomyClass: economyClassTotalSeat <= result.economyCounter
+                remainingSeatEconomyclass: economyClassTotalSeat - result.economyCounter
             };
             break;
 

@@ -8,7 +8,7 @@ import "./styles.scss";
 const Commands = () => {
 
   const dispatch = useDispatch();
-  const { fullBusinessClass, fullEconomyClass } = useSelector(selectorNarrowbody);
+  const { fullBusinessClass, remainingSeatEconomyclass } = useSelector(selectorNarrowbody);
 
   const addEconomy = (passengers) => dispatch({
     type: RESERVE_SEAT_ECONOMY_CLASS,
@@ -24,7 +24,7 @@ const Commands = () => {
         <p>Business Class:</p>
         <button
           disabled={fullBusinessClass}
-          className={`business ${fullBusinessClass ? ' fullBusinessClass ' : '' }`}
+          className={`business ${fullBusinessClass ? ' disableButton ' : '' }`}
           onClick={() => addBusiness()}
         >
           Add <strong>1</strong> passenger
@@ -32,19 +32,19 @@ const Commands = () => {
         <br />
         <p>Economy Class:</p>
         <button
-          className={`economy ${fullEconomyClass ? ' fullEconomyClass ' : '' }`}
+          className={`economy ${remainingSeatEconomyclass < 1 ? ' disableButton ' : '' }`}
           onClick={() => addEconomy(1)}
         >
           Add <strong>1</strong> passenger
         </button>
         <button
-          className={`economy ${fullEconomyClass ? ' fullEconomyClass ' : '' }`}
+          className={`economy ${remainingSeatEconomyclass < 2 ? ' disableButton ' : '' }`}
           onClick={() => addEconomy(2)}
         >
           Add <strong>2</strong> passengers
         </button>
         <button
-          className={`economy ${fullEconomyClass ? ' fullEconomyClass ' : '' }`}
+          className={`economy ${remainingSeatEconomyclass < 3 ? ' disableButton ' : '' }`}
           onClick={() => addEconomy(3)}
         >
           Add <strong>3</strong> passengers

@@ -18,11 +18,11 @@ const initialState = {
     limitRowBusinessClass,
     businessClassTotalSeat,
     economyClassTotalSeat,
+    remainingSeatEconomyclass: economyClassTotalSeat,
     totalRow,
     rowMiddle: 8,
 
     fullBusinessClass: false,
-    fullEconomyClass: false,
     fullAircraft: false
   }
 };
