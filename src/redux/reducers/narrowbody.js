@@ -116,10 +116,6 @@ export default function narrowbody(prevState = {}, action){
 
     switch (type) {
 
-        case actions.BUY_SEAT:
-            console.log("clonedState", payload);
-            break;
-
         case actions.RESERVE_SEAT_BUSINESS_CLASS:
             result = reserverBusinessClass(clonedState);
             clonedState = {
