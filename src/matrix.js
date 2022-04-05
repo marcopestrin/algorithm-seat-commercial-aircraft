@@ -25,5 +25,12 @@ const narrowBody = [
     [0,0,0,  0,0,0], // 19 (bottom)
   //[A,B,C,  D,E,F]
   ];
+export const rates = {
+  business: 120, // class
+  economy: 70, // class
+  emergency: 90, // replace class
+  window: 6, // to add to class
+  aisle: 5 // to add to class
+}
 
 export default narrowBody
