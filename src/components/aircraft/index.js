@@ -1,15 +1,23 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { selectorNarrowbody } from '../../redux/selectors';
+import { BUY_SEAT } from "../../redux/actions";
 import "./styles.scss";
 
 const Aircraft = () => {
-
+  const dispatch = useDispatch();
     const {
       limitRowBusinessClass,
       rowMiddle,
       matrix
     } = useSelector(selectorNarrowbody);
+
+    const getSeat = (row, column) => {
+      dispatch({
+        type: BUY_SEAT,
+        payload: {row, column }
+      })
+    }
     
     return (
       <div className="aircraft">
@@ -19,6 +27,7 @@ const Aircraft = () => {
               return (
                 <div
                   key={`${indexRow}${index}`}
+                  onClick={() => getSeat(indexRow,index)}
                   className={`
                     seat
                     ${column === 0 ? ' free ' : ' occuped '}
