@@ -72,14 +72,14 @@ const reserve2Passengers = (input) => {
 const reserve3Passengers = (input) => {
     const { startRow, limitRowBusinessClass, matrix, leftCounter, rightCounter } = input;
     for (let row = startRow; row > limitRowBusinessClass; row--) {
-      // fila 0, 1, 2 sono business class
+        // fila 0, 1, 2 sono business class
         if (leftCounter < rightCounter) {
             // controllo se ci sono posti liberi
             if (matrix[row][0] === 0 && matrix[row][1] === 0 && matrix[row][2] === 0) {
                 return getSeat({ ...input, row, nSeat: 3, startPosition: 0 });
             }
         }
-      // controllo se ci sono posti liberi
+        // controllo se ci sono posti liberi
         if (matrix[row][3] === 0 && matrix[row][4] === 0 && matrix[row][5] === 0) {
             return getSeat({ ...input, row, nSeat: 3, startPosition: 3 });
         }
@@ -117,7 +117,7 @@ export default function narrowbody(prevState = {}, action){
     switch (type) {
 
         case actions.RESERVE_SEAT_BUSINESS_CLASS:
-            result = reserverBusinessClass({ ...clonedState });
+            result = reserverBusinessClass(clonedState);
             clonedState = {
                 ...clonedState,
                 ...result,
@@ -128,15 +128,15 @@ export default function narrowbody(prevState = {}, action){
 
         case actions.RESERVE_SEAT_ECONOMY_CLASS:
             const { passengers } = payload;
-            const startRow = economyCounter < 24 || totalCounter > 48 ? totalRow : rowMiddle;
+            clonedState.startRow = economyCounter < 24 || totalCounter > 48 ? totalRow : rowMiddle;
             if (passengers === 3) {
-                result = reserve3Passengers({ startRow, ...clonedState });
+                result = reserve3Passengers(clonedState);
             };
             if (passengers === 2) {
-                result = reserve2Passengers({ startRow, ...clonedState});
+                result = reserve2Passengers(clonedState);
             };
             if (passengers === 1) {
-                result = reserve1Passengers({ startRow, ...clonedState});
+                result = reserve1Passengers(clonedState);
             };
             clonedState = {
                 ...clonedState,
