@@ -1,23 +1,6 @@
 import * as actions from "../actions";
 
-const getLetterSeat = (seat) => {
-    switch (seat) {
-        case 0:
-            return 'a';
-        case 1:
-            return 'b';
-        case 2:
-            return 'c';
-        case 3:
-            return 'd';
-        case 4:
-            return 'e';
-        case 5:
-            return 'f';
-        default:
-            return 'x';                            
-    }
-}
+const getLetterSeat = (seat) => ['a', 'b', 'c', 'd', 'e', 'f'][seat];
 
 const getSeat = ({ row, nSeat, startPosition, matrix, rightCounter, leftCounter, totalCounter, economyCounter }) => {
     const _endPosition = startPosition + nSeat;
