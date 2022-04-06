@@ -115,7 +115,6 @@ export default function narrowbody(prevState = {}, action){
   let result = {};
 
     switch (type) {
-
         case actions.RESERVE_SEAT_BUSINESS_CLASS:
             result = reserverBusinessClass(clonedState);
             clonedState = {
@@ -125,7 +124,6 @@ export default function narrowbody(prevState = {}, action){
                 fullBusinessClass: businessClassTotalSeat === result.businessCounter
             };
             break;
-
         case actions.RESERVE_SEAT_ECONOMY_CLASS:
             const { passengers } = payload;
             clonedState.startRow = economyCounter < 24 || totalCounter > 48 ? totalRow : rowMiddle;
@@ -146,10 +144,8 @@ export default function narrowbody(prevState = {}, action){
                 remainingSeatEconomyclass: economyClassTotalSeat - result.economyCounter
             };
             break;
-
         default:
             break;
-
     }
 
     return clonedState;

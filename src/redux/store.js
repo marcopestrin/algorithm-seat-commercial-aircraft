@@ -13,8 +13,6 @@ export const configureStore = () => {
 
     let store;
     const middlewareSaga = createSagaMiddleware();
-
-
     if (isDevMode && isChrome && isExtensionInstalled) {
         // queste condizioni fanno riferimento alla dev-tools-bar di redux
         store = createStore(
