@@ -6,12 +6,12 @@ const businessClassTotalSeat = (limitRowBusinessClass + 1) * 6;
 const economyClassTotalSeat = (totalRow - limitRowBusinessClass) * 6;
 
 const initialState = {
-  price: {
-    seatPrice: null
-  },
   narrowbody: {
+    seatPrice: null,
+    rowSelected: null,
+    columnSelected: null,
+    
     matrix: narrowbody,
-
     totalCounter: 0,
     rightCounter: 0,
     leftCounter: 0,

@@ -108,6 +108,11 @@ const reserverBusinessClass = ({ limitRowBusinessClass, rightCounter, leftCounte
     }
 };
 
+const reserveSeat = ({ column, row, matrix }) => {
+    matrix[row][column] = `${row}${getLetterSeat(column)}`;
+    return matrix
+};
+
 export default function narrowbody(prevState = {}, action){
   let clonedState = JSON.parse(JSON.stringify(prevState));
   const { type, payload } = action;
@@ -115,6 +120,29 @@ export default function narrowbody(prevState = {}, action){
   let result = {};
 
     switch (type) {
+        case actions.GOT_SEAT_PRICE:
+            clonedState = {
+                ...clonedState,
+                ...payload
+            }
+            break;
+        
+        case actions.CONFIRM_PRICE:
+            const {
+                columnSelected: column,
+                rowSelected: row,
+                matrix
+            } = clonedState;
+            const newMatrix = reserveSeat({ column, row, matrix });
+            clonedState = {
+                ...clonedState,
+                matrix: newMatrix,
+                rowSelected: null,
+                columnSelected: null,
+                seatPrice: null
+            };
+            break;
+
         case actions.RESERVE_SEAT_BUSINESS_CLASS:
             result = reserverBusinessClass(clonedState);
             clonedState = {
@@ -136,7 +164,6 @@ export default function narrowbody(prevState = {}, action){
             if (passengers === 1) {
                 result = reserve1Passengers(clonedState);
             };
-            console.log({ result })
             clonedState = {
                 ...clonedState,
                 ...result,

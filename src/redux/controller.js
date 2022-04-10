@@ -1,6 +1,6 @@
 import { put } from "redux-saga/effects";
 import { rates } from '../matrix'; 
-import { CONFIRM_PRICE } from './actions';
+import { GOT_SEAT_PRICE } from './actions';
 import {
   isBusinessClass,
   isEconomyClass,
@@ -19,7 +19,11 @@ export function* getPrice(dispatched) {
   if (isWindow(column)) price = price + rates.window;
   if (isAisle(column)) price = price + rates.aisle;
   yield put({
-    type: CONFIRM_PRICE,
-    payload: price
+    type: GOT_SEAT_PRICE,
+    payload: {
+      rowSelected: row,
+      columnSelected: column,
+      seatPrice: price
+    }
   })
 };

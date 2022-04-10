@@ -1,6 +1,6 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { selectorNarrowbody, selectorPrice } from '../../redux/selectors';
+import { selectorNarrowbody } from '../../redux/selectors';
 import { BUY_SEAT } from "../../redux/actions";
 import "./styles.scss";
 
@@ -11,7 +11,6 @@ const Aircraft = () => {
       rowMiddle,
       matrix
     } = useSelector(selectorNarrowbody);
-    const price = useSelector(selectorPrice);
 
     const getSeat = (row, column) => {
       dispatch({
