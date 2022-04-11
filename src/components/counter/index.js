@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
+import { Grid, Typography } from '@mui/material';
 import { selectorNarrowbody } from '../../redux/selectors';
-import "./styles.scss";
 const Counter =() => {
   const {
     totalCounter,
@@ -23,13 +23,23 @@ const Counter =() => {
   const getPercentageEconomyClass = () => economyCounter && (Math.floor(economyCounter / totalCounter * 100));
 
   return (
-    <div className="counter">
-      <p>Total passenger: <strong>{totalCounter}</strong> ({getPercentageCapacity()}%)</p>
-      <p>Left side: <strong>{leftCounter}</strong> ({getPercentageLeftSide()}%)</p>
-      <p>Right side: <strong>{rightCounter}</strong> ({getPercentageRightSide()}%)</p>
-      <p>Business class: <strong>{businessCounter}</strong> ({getPercentageBusinessClass()}%)</p>
-      <p>Economy class: <strong>{economyCounter}</strong> ({getPercentageEconomyClass()}%)</p>
-    </div>
+    <>
+      <Grid item xs={12}>
+        <Typography component="p">Total passenger: <strong>{totalCounter}</strong> ({getPercentageCapacity()}%)</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography component="p">Left side: <strong>{leftCounter}</strong> ({getPercentageLeftSide()}%)</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography component="p">Right side: <strong>{rightCounter}</strong> ({getPercentageRightSide()}%)</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography component="p">Business class: <strong>{businessCounter}</strong> ({getPercentageBusinessClass()}%)</Typography>
+      </Grid>
+      <Grid item xs={12}>
+        <Typography component="p">Economy class: <strong>{economyCounter}</strong> ({getPercentageEconomyClass()}%)</Typography>
+      </Grid>
+    </>
   )
 }
 export default Counter;
